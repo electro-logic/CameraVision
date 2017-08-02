@@ -1,0 +1,19 @@
+# More documentation at http://electro-logic.blogspot.it
+
+# Visual Studio
+obj/
+.vs/
+*.pdb
+
+# Quartus
+db/
+incremental_db/
+simulation/
+*.summary
+*.smsg
+*.sld
+*.rpt
+*.pof
+*.pin
+*.jdi
+*.done
