@@ -16,3 +16,7 @@ Supported Hardware:
 
 - DE0-Nano
 - D8M
+
+Notes:
+
+Power consumption of DE0-Nano with D8M connected throught USB: 0.35A
