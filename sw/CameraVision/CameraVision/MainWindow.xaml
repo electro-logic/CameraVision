@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" Loaded="Window_Loaded"        
         SnapsToDevicePixels="True" RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.EdgeMode="Aliased"
-        Title="Camera Vision - D8M by Leonardo @ http://electro-logic.blogspot.it"
+        Title="Camera Vision v0.1 by Leonardo @ http://electro-logic.blogspot.it"
         Height="770" Width="1420" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
@@ -22,9 +22,9 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="1.4*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="29*"/>
@@ -32,6 +32,21 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Image Source="{Binding Image}" Margin="10" Grid.Column="1" Grid.Row="1" />
+
+
+        <GroupBox Header="Registers">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Read All" Command="{Binding ReadRegistersCommand}" />
+                <Button Content="Load" Command="{Binding LoadRegistersCommand}" Grid.Column="1" />
+                <!--<Button Content="Save" Command="{Binding SaveRegistersCommand}" Grid.Column="2" />-->
+            </Grid>
+        </GroupBox>
+
         <DataGrid Grid.Row="1" Margin="10" ItemsSource="{Binding Registers}" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Address" Binding="{Binding Address, StringFormat=\{0:X\}}" IsReadOnly="True" />
@@ -39,55 +54,57 @@
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>
+
+
+
         <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
             <GroupBox Header="Exposure">
                 <StackPanel Margin="10">
-                    <Slider Value="{Binding Exposure}" TickPlacement="BottomRight" Maximum="65535" SmallChange="1024"/>
-                    <TextBlock Text="{Binding Exposure, FallbackValue=0}" TextAlignment="Center" />
-                    <TextBlock TextAlignment="Center">
-                        <Run Text="{Binding ExposureMs, FallbackValue=0}"/>
-                        <Run Text="ms"/>
-                    </TextBlock>
+                    <Slider Value="{Binding Exposure}" TickPlacement="BottomRight" Maximum="65535" SmallChange="1" LargeChange="128"/>
+                    <TextBlock Text="{Binding ExposureMs, FallbackValue=0 ms, Mode=OneWay, StringFormat=\{0\} ms}" TextAlignment="Center" />
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Analog Gain">
+            <GroupBox Header="Analog Gain (ISO)">
                 <StackPanel Margin="10">
-                    <Slider Value="{Binding AnalogGain}" TickPlacement="BottomRight" Maximum="7" SmallChange="1"/>
-                    <TextBlock Text="{Binding AnalogGain, FallbackValue=0}" TextAlignment="Center" />
+                    <Slider Value="{Binding AnalogGain}" TickPlacement="BottomRight" Maximum="8" Minimum="1" SmallChange="1"/>
+                    <TextBlock TextAlignment="Center">
+                        <Run Text="{Binding AnalogGain, FallbackValue=0x, StringFormat=\{0\}x}"/>
+                        <Run Text="{Binding ISO, FallbackValue=(ISO 100), StringFormat=(ISO \{0\}), Mode=OneWay}"/>
+                    </TextBlock>
                 </StackPanel>
             </GroupBox>
             <GroupBox>
                 <GroupBox.Header>
                     <CheckBox Content="Manual White Balance Gain" IsChecked="{Binding IsWhiteBalanceEnabled}" />
                 </GroupBox.Header>
-                    <Grid Margin="10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="Red " TextAlignment="Right" />
-                        <TextBlock Grid.Row="1" Text="Green " TextAlignment="Right" />
-                        <TextBlock Grid.Row="2" Text="Blue " TextAlignment="Right" />
+                    <TextBlock Grid.Row="0" Text="Red " TextAlignment="Right" />
+                    <TextBlock Grid.Row="1" Text="Green " TextAlignment="Right" />
+                    <TextBlock Grid.Row="2" Text="Blue " TextAlignment="Right" />
 
-                        <Slider Grid.Row="0" Grid.Column="1" Value="{Binding MWBGainRed}" Maximum="16" LargeChange="1" SmallChange="1" TickFrequency="1" TickPlacement="BottomRight"/>
-                        <Slider Grid.Row="1" Grid.Column="1" Value="{Binding MWBGainGreen}" Maximum="16" LargeChange="1" SmallChange="1" TickFrequency="1" TickPlacement="BottomRight"/>
-                        <Slider Grid.Row="2" Grid.Column="1" Value="{Binding MWBGainBlue}" Maximum="16" LargeChange="1" SmallChange="1" TickFrequency="1" TickPlacement="BottomRight"/>
+                    <Slider Grid.Row="0" Grid.Column="1" Value="{Binding MWBGainRed}" Maximum="16" LargeChange="1" SmallChange="1" TickFrequency="1" TickPlacement="BottomRight"/>
+                    <Slider Grid.Row="1" Grid.Column="1" Value="{Binding MWBGainGreen}" Maximum="16" LargeChange="1" SmallChange="1" TickFrequency="1" TickPlacement="BottomRight"/>
+                    <Slider Grid.Row="2" Grid.Column="1" Value="{Binding MWBGainBlue}" Maximum="16" LargeChange="1" SmallChange="1" TickFrequency="1" TickPlacement="BottomRight"/>
 
-                        <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding MWBGainRed}" />
-                        <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding MWBGainGreen}" />
-                        <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding MWBGainBlue}" />
-                    </Grid>
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding MWBGainRed}" />
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding MWBGainGreen}" />
+                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding MWBGainBlue}" />
+                </Grid>
             </GroupBox>
-            
-            <TextBlock Text="NB: Please Read registers again after editing upper settings" TextWrapping="Wrap" Margin="10" />
-            
+
+            <TextBlock Text="Read registers after changing settings" TextWrapping="Wrap" Margin="10" FontStyle="Italic" />
+
             <GroupBox Header="Focus">
                 <StackPanel Margin="10">
                     <Slider Value="{Binding Focus}" Maximum="1023" LargeChange="32" SmallChange="1" TickFrequency="64" TickPlacement="BottomRight"/>
@@ -98,22 +115,38 @@
                 <GroupBox.Header>
                     <CheckBox Content="Color Correction Matrix" IsChecked="{Binding IsColorCorrectionEnabled}" />
                 </GroupBox.Header>
-                <UniformGrid Rows="3" Columns="3" Margin="10">
-                    <TextBox Text="{Binding Ccm[0]}" />
-                    <TextBox Text="{Binding Ccm[1]}" />
-                    <TextBox Text="{Binding Ccm[2]}" />
-                    <TextBox Text="{Binding Ccm[3]}" />
-                    <TextBox Text="{Binding Ccm[4]}" />
-                    <TextBox Text="{Binding Ccm[5]}" />
-                    <TextBox Text="{Binding Ccm[6]}" />
-                    <TextBox Text="{Binding Ccm[7]}" />
-                    <TextBox Text="{Binding Ccm[8]}" />
-                </UniformGrid>
+                <StackPanel Margin="10">
+                    <UniformGrid Rows="3" Columns="3">
+                        <TextBox Text="{Binding Ccm[0]}" />
+                        <TextBox Text="{Binding Ccm[1]}" />
+                        <TextBox Text="{Binding Ccm[2]}" />
+                        <TextBox Text="{Binding Ccm[3]}" />
+                        <TextBox Text="{Binding Ccm[4]}" />
+                        <TextBox Text="{Binding Ccm[5]}" />
+                        <TextBox Text="{Binding Ccm[6]}" />
+                        <TextBox Text="{Binding Ccm[7]}" />
+                        <TextBox Text="{Binding Ccm[8]}" />
+                    </UniformGrid>
+                    <!--<TextBlock Text="Matrix Multiplier" />
+                    <TextBox Text="{Binding CcmScale, FallbackValue=1.0}" />-->
+                </StackPanel>
             </GroupBox>
-            
+
             <!--<Button Content="Focus Bracketing" Command="{Binding FocusBracketingCommand}" Margin="10" />-->
             <!--<Button Content="Exposure Bracketing" Command="{Binding ExposureBracketingCommand}" Margin="10" />-->
-            
+
+            <GroupBox Header="RAW Histogram (Beta)" Visibility="Hidden">
+                <Border BorderBrush="Black" BorderThickness="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Polygon Points="{Binding HistogramPoints, UpdateSourceTrigger=PropertyChanged}" Stroke="Black" Fill="Yellow" Stretch="Fill" Height="100" Width="256">
+                        <Polygon.LayoutTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleY="-1"/>
+                            </TransformGroup>
+                        </Polygon.LayoutTransform>
+                    </Polygon>
+                </Border>
+            </GroupBox>
+
         </StackPanel>
         <GroupBox Grid.Column="1" Header="Image">
             <Grid>
@@ -133,18 +166,6 @@
 
                 <!--<TextBox Grid.Column="2" Text="{Binding ImageWidth}" />
                 <TextBox Grid.Column="3" Text="{Binding ImageHeight}" />-->
-            </Grid>
-        </GroupBox>
-        <GroupBox Header="Registers">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Button Content="Read All" Command="{Binding ReadRegistersCommand}" />
-                <Button Content="Load" Command="{Binding LoadRegistersCommand}" Grid.Column="1" />
-                <!--<Button Content="Save" Command="{Binding SaveRegistersCommand}" Grid.Column="2" />-->
             </Grid>
         </GroupBox>
     </Grid>

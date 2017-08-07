@@ -22,8 +22,9 @@ namespace CameraVision
         DemosaicingAlgorithms _currentDemosaicingAlgorithm;
         VideoSetting _currentVideoSetting;
         double[] _ccm;
+        double _ccmScale;
         bool _isColorCorrectionEnabled;
-        double _exposureMs;
+        PointCollection _histogramPoints;
 
         public ObservableCollection<Register> Registers { get; set; }
         public ICommand DownloadImageCommand { get; set; }
@@ -113,6 +114,12 @@ namespace CameraVision
                     new Register(0x380A,0x02),
                     new Register(0x380B,0x58),
                 } },
+                new VideoSetting(){ Description="800x480", Registers=new List<Register>(){
+                    new Register(0x3808,0x03),
+                    new Register(0x3809,0x20),
+                    new Register(0x380A,0x01),
+                    new Register(0x380B,0xE0),
+                } },
                 new VideoSetting(){ Description="640x480 0.3MP VGA (4x4 skipping)", Registers=new List<Register>(){
                     new Register(0x3808,0x02),
                     new Register(0x3809,0x80),
@@ -149,7 +156,7 @@ namespace CameraVision
             Ccm[4] = 1.0;
             Ccm[8] = 1.0;
 
-            /*
+
             Ccm[0] = 1.5344;
             Ccm[1] = 0.241;
             Ccm[2] = -0.2618;
@@ -158,8 +165,9 @@ namespace CameraVision
             Ccm[5] = -0.4828;
             Ccm[6] = -0.0335;
             Ccm[7] = -0.4097;
-            Ccm[8] = 2.1413;            
-            */
+            Ccm[8] = 2.1413;
+
+            CcmScale = 1.0;
 
             DownloadImageCommand = new DelegateCommand(DownloadImage);
             SaveImageCommand = new DelegateCommand(SaveImage);
@@ -168,6 +176,7 @@ namespace CameraVision
             FocusBracketingCommand = new DelegateCommand(FocusBracketing);
             //SaveRegistersCommand = new DelegateCommand(SaveRegisters);
             ExposureBracketingCommand = new DelegateCommand(ExposureBracketing);
+            HistogramPoints = new PointCollection();
 
             Registers = new ObservableCollection<Register>();
         }
@@ -364,17 +373,15 @@ namespace CameraVision
 
         public double Exposure
         {
-            get {
+            get
+            {
                 return (double)(_sensor.GetExposure());
             }
             set
             {
-                _sensor.SetExposure((UInt16)(value));
-                OnPropertyChanged("Exposure");
-
-                
-                UInt16 vts = _sensor.GetVTS();  // dummy lines
-                UInt16 hts = _sensor.GetHTS();  // extra lines                
+                _sensor.SetExposure((UInt16)(value));                
+                UInt16 vts = _sensor.GetVTS();  // dummy lines                
+                UInt16 hts = _sensor.GetHTS();  // extra lines
 
                 // Max exposure = dummy lines - 4
                 UInt16 maxExposure = (UInt16)(vts);
@@ -386,7 +393,8 @@ namespace CameraVision
                     _sensor.SetVTS((UInt16)(exposure + 4));
                 }
 
-                ExposureMs = (1.0 / 125000.0) * (double)(hts) * (value);
+                OnPropertyChanged("Exposure");
+                OnPropertyChanged("ExposureMs");
             }
         }
 
@@ -398,8 +406,13 @@ namespace CameraVision
 
         public double AnalogGain
         {
-            get { return (double)(_sensor.GetAnalogGain()); }
-            set { _sensor.SetAnalogGain((byte)value); OnPropertyChanged("AnalogGain"); }
+            get { return (double)(_sensor.GetAnalogGain() + 1); }
+            set { _sensor.SetAnalogGain((byte)(value - 1)); OnPropertyChanged("AnalogGain"); OnPropertyChanged("ISO"); }
+        }
+
+        public double ISO
+        {
+            get { return AnalogGain * 100; }
         }
 
         public double MWBGainRed
@@ -540,13 +553,36 @@ namespace CameraVision
         {
             get
             {
-                return _exposureMs;
+                UInt16 hts = _sensor.GetHTS();  // extra lines
+                return (1.0 / 125000.0) * (double)(hts) * (Exposure);
+            }
+        }
+
+        public PointCollection HistogramPoints
+        {
+            get
+            {
+                return _histogramPoints;
             }
 
             set
             {
-                _exposureMs = value;
-                OnPropertyChanged("ExposureMs");
+                _histogramPoints = value;
+                OnPropertyChanged("HistogramPoints");
+            }
+        }
+
+        public double CcmScale
+        {
+            get
+            {
+                return _ccmScale;
+            }
+
+            set
+            {
+                _ccmScale = value;
+                OnPropertyChanged("CcmScale");
             }
         }
 
@@ -563,8 +599,29 @@ namespace CameraVision
         {
             int imageWidth = (int)Image.Width;
             int imageHeight = (int)Image.Height;
-
             byte[] rawPixels = _sensor.GetImage(imageWidth, imageHeight);
+
+            // Create Histogram
+            int[] histogramValues = new int[256];
+
+            for (int pixelIndex = 0; pixelIndex < imageWidth * imageHeight; pixelIndex++)
+            {
+                histogramValues[rawPixels[pixelIndex]]++;
+            }
+            HistogramPoints.Clear();
+            double max = histogramValues.Max();
+            HistogramPoints.Add(new Point(0, 0));
+            for (int i = 0; i < histogramValues.Length; i++)
+            {
+                double x = i;
+                double y = 100.0 * histogramValues[i] / max;
+                HistogramPoints.Add(new Point(x, y));
+            }
+            double endX = (histogramValues.Length - 1);
+            HistogramPoints.Add(new Point(endX, 0));
+
+            HistogramPoints = new PointCollection(HistogramPoints);
+            OnPropertyChanged("HistogramPoints");
 
             int[] colorPixels = null;
             switch (CurrentDemosaicingAlgorithm)
@@ -600,10 +657,10 @@ namespace CameraVision
                         if ((r == 255) && (g == 255) && (b == 255))
                             continue;
 
-                        byte Cr = (byte)Saturate(Ccm[0] * r + Ccm[1] * g + Ccm[2] * b, 0, 255);
-                        byte Cg = (byte)Saturate(Ccm[3] * r + Ccm[4] * g + Ccm[5] * b, 0, 255);
-                        byte Cb = (byte)Saturate(Ccm[6] * r + Ccm[7] * g + Ccm[8] * b, 0, 255);
-                        
+                        byte Cr = (byte)Saturate(Ccm[0]* CcmScale * r + Ccm[1] * CcmScale * g + Ccm[2] * CcmScale * b, 0, 255);
+                        byte Cg = (byte)Saturate(Ccm[3] * CcmScale * r + Ccm[4] * CcmScale * g + Ccm[5] * CcmScale * b, 0, 255);
+                        byte Cb = (byte)Saturate(Ccm[6] * CcmScale * r + Ccm[7] * CcmScale * g + Ccm[8] * CcmScale * b, 0, 255);
+
                         colorPixels[pixelIndex] = BitConverter.ToInt32(new byte[] { Cb, Cg, Cr, 255 }, 0);
                     }
                 }

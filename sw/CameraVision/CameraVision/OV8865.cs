@@ -242,7 +242,9 @@ public class OV8865
     }
 
     /// <summary>
-    ///  Maximum is 16x analog gain.
+    /// If 0x3503[2]=0 then Gain is in real gain format.
+    /// real_gain = gain[12:0] / 128 where gain[6:0] are fraction bits.
+    /// Maximum is 16x analog gain.
     /// </summary>
     /// <param name="value"></param>
     public void SetAnalogGain(byte value)
