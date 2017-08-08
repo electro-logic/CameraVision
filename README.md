@@ -9,13 +9,13 @@ Read http://electro-logic.blogspot.it for more documentation
 
 Requirements:
 
-- Visual Studio 2017 (.NET 4.5)
-- Altera Quartus 17
+- Microsoft Visual Studio 2017 (.NET 4.5)
+- Intel Quartus Prime 17
 
 Supported Hardware:
 
-- DE0-Nano
-- D8M
+- Terasic DE0-Nano
+- Terasic D8M
 
 Notes:
 

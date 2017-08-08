@@ -113,7 +113,7 @@ const CameraRegister CAMERA_REGISTERS[] = {
 
 		{0x3503, 0x00}, // gain no delay, exposure no delay
 		{0x3508, 0x00}, // gain H
-		{0x3509, 0x00}, // gain L
+		{0x3509, 0x80}, // gain L	(6:3 fine grain)
 
 		{0x350A, 0x00}, // AEC DIGIGAIN 13:6
 		{0x350B, 0x00}, // AEC DIGIGAIN 5:0

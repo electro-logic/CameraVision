@@ -10,6 +10,9 @@ Debug/
 db/
 incremental_db/
 simulation/
+synthesis/
+.qsys_edit/
+.settings/
 *.summary
 *.smsg
 *.sld

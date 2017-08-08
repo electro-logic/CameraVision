@@ -66,7 +66,8 @@
             </GroupBox>
             <GroupBox Header="Analog Gain (ISO)">
                 <StackPanel Margin="10">
-                    <Slider Value="{Binding AnalogGain}" TickPlacement="BottomRight" Maximum="8" Minimum="1" SmallChange="1"/>
+                    <Slider Value="{Binding AnalogGain}" TickPlacement="BottomRight" Maximum="16" Minimum="1" SmallChange="1"
+                            Ticks="1 2 4 8 16" IsSnapToTickEnabled="True" />
                     <TextBlock TextAlignment="Center">
                         <Run Text="{Binding AnalogGain, FallbackValue=0x, StringFormat=\{0\}x}"/>
                         <Run Text="{Binding ISO, FallbackValue=(ISO 100), StringFormat=(ISO \{0\}), Mode=OneWay}"/>
@@ -135,9 +136,9 @@
             <!--<Button Content="Focus Bracketing" Command="{Binding FocusBracketingCommand}" Margin="10" />-->
             <!--<Button Content="Exposure Bracketing" Command="{Binding ExposureBracketingCommand}" Margin="10" />-->
 
-            <GroupBox Header="RAW Histogram (Beta)" Visibility="Hidden">
+            <GroupBox Header="RAW Histogram (Beta)">
                 <Border BorderBrush="Black" BorderThickness="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Polygon Points="{Binding HistogramPoints, UpdateSourceTrigger=PropertyChanged}" Stroke="Black" Fill="Yellow" Stretch="Fill" Height="100" Width="256">
+                    <Polygon Points="{Binding HistogramPoints, UpdateSourceTrigger=PropertyChanged}" Stroke="Black" Fill="Yellow" Stretch="None" Height="100" Width="256">
                         <Polygon.LayoutTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleY="-1"/>
@@ -163,6 +164,7 @@
                 <Button Content="Save" Command="{Binding SaveImageCommand}" Grid.Column="1" />
                 <ComboBox Grid.Column="2" Grid.ColumnSpan="2" Margin="5" ItemsSource="{Binding VideoSettings}" SelectedIndex="0" SelectedItem="{Binding CurrentVideoSetting}" VerticalAlignment="Center" />
                 <ComboBox Grid.Column="4" Grid.ColumnSpan="2" Margin="5" ItemsSource="{Binding DemosaicingAlgorithms}" SelectedIndex="0" SelectedItem="{Binding CurrentDemosaicingAlgorithm}" VerticalAlignment="Center" />
+                <TextBlock Grid.Column="6" TextWrapping="Wrap" Text="{Binding FPS, FallbackValue=0 fps, StringFormat=\{0\} fps}" VerticalAlignment="Center"/>
 
                 <!--<TextBox Grid.Column="2" Text="{Binding ImageWidth}" />
                 <TextBox Grid.Column="3" Text="{Binding ImageHeight}" />-->

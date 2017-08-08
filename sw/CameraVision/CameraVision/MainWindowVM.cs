@@ -244,37 +244,37 @@ namespace CameraVision
         {
             Registers.Clear();
 
-            AddRegister(0x0100, "OV8865_SC_CTRL0100");
+            //AddRegister(0x0100, "OV8865_SC_CTRL0100");
             //AddRegister(0x0103, "OV8865_SC_CTRL0103");
 
             // PLL
-            AddRegister(0x0300, "PLL_CTRL_0");
-            AddRegister(0x0301, "PLL_CTRL_1");
-            AddRegister(0x0302, "PLL_CTRL_2");
-            AddRegister(0x0303, "PLL_CTRL_3");
-            AddRegister(0x0304, "PLL_CTRL_4");
-            AddRegister(0x0305, "PLL_CTRL_5");
-            AddRegister(0x0306, "PLL_CTRL_6");
-            AddRegister(0x0307, "PLL_CTRL_7");
-            AddRegister(0x0308, "PLL_CTRL_8");
-            AddRegister(0x0309, "PLL_CTRL_9");
-            AddRegister(0x030A, "PLL_CTRL_A");
-            AddRegister(0x030B, "PLL_CTRL_B");
-            AddRegister(0x030C, "PLL_CTRL_C");
-            AddRegister(0x030D, "PLL_CTRL_D");
-            AddRegister(0x030E, "PLL_CTRL_E");
-            AddRegister(0x030F, "PLL_CTRL_F");
-            AddRegister(0x0310, "PLL_CTRL_10");
-            AddRegister(0x0311, "PLL_CTRL_11");
-            AddRegister(0x0312, "PLL_CTRL_12");
-            AddRegister(0x031B, "PLL_CTRL_1B");
-            AddRegister(0x031C, "PLL_CTRL_1C");
-            AddRegister(0x031E, "PLL_CTRL_1E");
-            AddRegister(0x3106, "SCLK_DIV, SCLK_PRE_DIV");
-            AddRegister(0x3007, "R ISPOUT BITSEL");
-            AddRegister(0x3020, "PCLK_DIV");
-            AddRegister(0x3032, "MUX PLL_SYS_CLK");
-            AddRegister(0x3033, "MUX DAC_SYS_CLK");
+            //AddRegister(0x0300, "PLL_CTRL_0");
+            //AddRegister(0x0301, "PLL_CTRL_1");
+            //AddRegister(0x0302, "PLL_CTRL_2");
+            //AddRegister(0x0303, "PLL_CTRL_3");
+            //AddRegister(0x0304, "PLL_CTRL_4");
+            //AddRegister(0x0305, "PLL_CTRL_5");
+            //AddRegister(0x0306, "PLL_CTRL_6");
+            //AddRegister(0x0307, "PLL_CTRL_7");
+            //AddRegister(0x0308, "PLL_CTRL_8");
+            //AddRegister(0x0309, "PLL_CTRL_9");
+            //AddRegister(0x030A, "PLL_CTRL_A");
+            //AddRegister(0x030B, "PLL_CTRL_B");
+            //AddRegister(0x030C, "PLL_CTRL_C");
+            //AddRegister(0x030D, "PLL_CTRL_D");
+            //AddRegister(0x030E, "PLL_CTRL_E");
+            //AddRegister(0x030F, "PLL_CTRL_F");
+            //AddRegister(0x0310, "PLL_CTRL_10");
+            //AddRegister(0x0311, "PLL_CTRL_11");
+            //AddRegister(0x0312, "PLL_CTRL_12");
+            //AddRegister(0x031B, "PLL_CTRL_1B");
+            //AddRegister(0x031C, "PLL_CTRL_1C");
+            //AddRegister(0x031E, "PLL_CTRL_1E");
+            //AddRegister(0x3106, "SCLK_DIV, SCLK_PRE_DIV");
+            //AddRegister(0x3007, "R ISPOUT BITSEL");
+            //AddRegister(0x3020, "PCLK_DIV");
+            //AddRegister(0x3032, "MUX PLL_SYS_CLK");
+            //AddRegister(0x3033, "MUX DAC_SYS_CLK");
 
             // Image Windowing Control
             AddRegister(0x3808, "H_OUTPUT_SIZE 11:8");
@@ -316,15 +316,15 @@ namespace CameraVision
             AddRegister(0x5000, "ISP CTRL00");
 
             // Window Cut (WINC)
-            AddRegister(0x5A00, "WINC CTRL00");
-            AddRegister(0x5A01, "WINC CTRL01");
-            AddRegister(0x5A02, "WINC CTRL02");
-            AddRegister(0x5A03, "WINC CTRL03");
-            AddRegister(0x5A04, "WINC CTRL04");
-            AddRegister(0x5A05, "WINC CTRL05");
-            AddRegister(0x5A06, "WINC CTRL06");
-            AddRegister(0x5A07, "WINC CTRL07");
-            AddRegister(0x5A08, "WINC CTRL08");
+            //AddRegister(0x5A00, "WINC CTRL00");
+            //AddRegister(0x5A01, "WINC CTRL01");
+            //AddRegister(0x5A02, "WINC CTRL02");
+            //AddRegister(0x5A03, "WINC CTRL03");
+            //AddRegister(0x5A04, "WINC CTRL04");
+            //AddRegister(0x5A05, "WINC CTRL05");
+            //AddRegister(0x5A06, "WINC CTRL06");
+            //AddRegister(0x5A07, "WINC CTRL07");
+            //AddRegister(0x5A08, "WINC CTRL08");
 
             // Manual White Balance (MWB)
             AddRegister(0x5018, "ISP CTRL18");
@@ -340,35 +340,49 @@ namespace CameraVision
             AddRegister(0x3501, "AEC EXPO 15:8");
             AddRegister(0x3502, "AEC EXPO 7:0");
             AddRegister(0x3503, "AEC MANUAL");
-            AddRegister(0x3505, "GCVT OPTION");
-            AddRegister(0x3507, "AEC GAIN SHIFT");
+            //AddRegister(0x3505, "GCVT OPTION");
+            //AddRegister(0x3507, "AEC GAIN SHIFT");
             AddRegister(0x3508, "AEC GAIN 12:8");
             AddRegister(0x3509, "AEC GAIN 7:0");
             AddRegister(0x350A, "AEC DIGIGAIN 13:6");
             AddRegister(0x350B, "AEC DIGIGAIN 5:0");
 
             // System Control
-            AddRegister(0x300A, "CHIP ID 23:16");
-            AddRegister(0x300B, "CHIP ID 15:8");
-            AddRegister(0x300C, "CHIP ID 7:0");
+            //AddRegister(0x300A, "CHIP ID 23:16");
+            //AddRegister(0x300B, "CHIP ID 15:8");
+            //AddRegister(0x300C, "CHIP ID 7:0");
 
             // Timing Control Registers
-            AddRegister(0x3822, "REG22");
-            AddRegister(0x382C, "BLC COL ST L");
-            AddRegister(0x382D, "BLC COL END L");
-            AddRegister(0x382E, "BLC COL ST R");
-            AddRegister(0x382F, "BLC COL END R");
-            AddRegister(0x3830, "BLC NUM OPTION");
-            AddRegister(0x3831, "BLC NUM MAN");
-            AddRegister(0x3836, "ZLINE NUM OPTION");
+            //AddRegister(0x3822, "REG22");
+            //AddRegister(0x382C, "BLC COL ST L");
+            //AddRegister(0x382D, "BLC COL END L");
+            //AddRegister(0x382E, "BLC COL ST R");
+            //AddRegister(0x382F, "BLC COL END R");
+            //AddRegister(0x3830, "BLC NUM OPTION");
+            //AddRegister(0x3831, "BLC NUM MAN");
+            //AddRegister(0x3836, "ZLINE NUM OPTION");
 
             // BLC Control
-            AddRegister(0x4000, "BLC CTRL00");
+            //AddRegister(0x4000, "BLC CTRL00");
             AddRegister(0x4004, "BLC CTRL04 target 15:8");
             AddRegister(0x4005, "BLC CTRL05 target 7:0");
 
+            AddRegister(0x4300, "CLIP MAX HI");
+            AddRegister(0x4301, "CLIP MIN HI");
+            //AddRegister(0x4302, "CLIP LO");
+            //AddRegister(0x4303, "FORMAT CTRL 3");
+
+
             // OTP
             // AddRegister(0x3D81, "OTP_REG85");
+
+            // Update GUI elements
+            OnPropertyChanged("FPS");
+            OnPropertyChanged("ExposureMs"); OnPropertyChanged("Exposure");
+            OnPropertyChanged("AnalogGain"); OnPropertyChanged("ISO");
+            OnPropertyChanged("IsWhiteBalanceEnabled");
+            OnPropertyChanged("MWBGainRed"); OnPropertyChanged("MWBGainGreen"); OnPropertyChanged("MWBGainBlue");
+            
         }
 
         public double Exposure
@@ -379,8 +393,8 @@ namespace CameraVision
             }
             set
             {
-                _sensor.SetExposure((UInt16)(value));                
-                UInt16 vts = _sensor.GetVTS();  // dummy lines                
+                _sensor.SetExposure((UInt16)(value));
+                UInt16 vts = _sensor.GetVTS();  // dummy lines
                 UInt16 hts = _sensor.GetHTS();  // extra lines
 
                 // Max exposure = dummy lines - 4
@@ -554,7 +568,19 @@ namespace CameraVision
             get
             {
                 UInt16 hts = _sensor.GetHTS();  // extra lines
-                return (1.0 / 125000.0) * (double)(hts) * (Exposure);
+                return Math.Round((1.0 / 125000.0) * (double)(hts) * (Exposure),2);
+            }
+        }
+
+        public double FPS
+        {
+            get
+            {
+                UInt16 hts = _sensor.GetHTS();  // extra lines
+                UInt16 vts = _sensor.GetVTS();  // dummy lines
+                // System Clock (SCLK) of sensor is set at 166.66 MHz
+                double fps = 166666666.0 / (hts * vts);
+                return Math.Round(fps, 2);
             }
         }
 
@@ -653,11 +679,22 @@ namespace CameraVision
                         byte g = colorBytes[1];
                         byte b = colorBytes[0];
 
+                        // Don't correct completely black pixels
+                        if ((r == 0) && (g == 0) && (b == 0))
+                            continue;
+
                         // Don't correct completely saturated pixels
                         if ((r == 255) && (g == 255) && (b == 255))
                             continue;
 
-                        byte Cr = (byte)Saturate(Ccm[0]* CcmScale * r + Ccm[1] * CcmScale * g + Ccm[2] * CcmScale * b, 0, 255);
+                        var c = System.Drawing.Color.FromArgb(r, g, b);
+                        if (c.GetBrightness() > 0.75)
+                        {
+                            colorPixels[pixelIndex] = BitConverter.ToInt32(new byte[] { 255, 255, 255, 255 }, 0);
+                            continue;
+                        }
+
+                        byte Cr = (byte)Saturate(Ccm[0] * CcmScale * r + Ccm[1] * CcmScale * g + Ccm[2] * CcmScale * b, 0, 255);
                         byte Cg = (byte)Saturate(Ccm[3] * CcmScale * r + Ccm[4] * CcmScale * g + Ccm[5] * CcmScale * b, 0, 255);
                         byte Cb = (byte)Saturate(Ccm[6] * CcmScale * r + Ccm[7] * CcmScale * g + Ccm[8] * CcmScale * b, 0, 255);
 
