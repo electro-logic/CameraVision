@@ -5,6 +5,13 @@ using System.Threading.Tasks;
 
 namespace CameraVision
 {
+    public enum DemosaicingAlgorithms
+    {
+        SIMPLE_INTERPOLATION,
+        COLOR_RAW,
+        GRAY_RAW
+    }
+
     /// <summary>
     /// Algorithms that works on byte array of raw bayer pattern
     /// </summary>

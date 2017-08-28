@@ -27,11 +27,10 @@ public class Register : ObjectModel
         {
             return _address;
         }
-
         set
         {
             _address = value;
-            OnPropertyChanged("Address");
+            OnPropertyChanged();
         }
     }
 
@@ -41,11 +40,10 @@ public class Register : ObjectModel
         {
             return _value;
         }
-
         set
         {
             _value = value;
-            OnPropertyChanged("Value");
+            OnPropertyChanged();
         }
     }
 
@@ -55,11 +53,10 @@ public class Register : ObjectModel
         {
             return _description;
         }
-
         set
         {
             _description = value;
-            OnPropertyChanged("Description");
+            OnPropertyChanged();
         }
     }
 }

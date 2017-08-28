@@ -1,6 +1,4 @@
-﻿// TODO: Check memory leak
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 

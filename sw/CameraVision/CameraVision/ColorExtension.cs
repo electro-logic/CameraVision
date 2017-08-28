@@ -6,6 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+namespace CameraVision
+{
+    /// <summary>
+    /// Functions to work with HSB color space
+    /// </summary>
     public static class ColorExtension
     {
         public static float GetHue(this System.Windows.Media.Color c)
@@ -26,3 +31,4 @@ using System.Threading.Tasks;
             return color.GetSaturation();
         }
     }
+}

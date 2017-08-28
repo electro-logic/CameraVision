@@ -56,6 +56,7 @@ namespace CameraVision
                 Environment.Exit(-1);
             }
 
+            // TODO: Read available settings from external file
             VideoSettings = new List<VideoSetting>()
             {
                 new VideoSetting(){ Description="3264x2448 8MP", Registers=new List<Register>(){
@@ -84,6 +85,20 @@ namespace CameraVision
                     new Register(0x380A,0x04),
                     new Register(0x380B,0x38),
                 } },
+                new VideoSetting(){ Description="1440x900 1.3MP WXGA+", Registers=new List<Register>(){
+                    new Register(0x3808,0x05),
+                    new Register(0x3809,0xA0),
+                    new Register(0x380A,0x03),
+                    new Register(0x380B,0x84),
+                    //new Register(0x3821,0x48),
+                } },
+                new VideoSetting(){ Description="1280x1024 1.3MP", Registers=new List<Register>(){
+                    new Register(0x3808,0x05),
+                    new Register(0x3809,0x00),
+                    new Register(0x380A,0x04),
+                    new Register(0x380B,0x00),
+                    //new Register(0x3821,0x48),
+                } },
                 new VideoSetting(){ Description="1366x768 1MP HD", Registers=new List<Register>(){
                     new Register(0x3808,0x05),
                     new Register(0x3809,0x56),
@@ -107,6 +122,17 @@ namespace CameraVision
                     new Register(0x382B,0x01),
                     new Register(0x3830,0x08),
                     new Register(0x3836,0x02),
+                } },
+                new VideoSetting(){ Description="800x600 SVGA (2x2 binning sum)", Registers=new List<Register>(){
+                    new Register(0x3808,0x03),
+                    new Register(0x3809,0x20),
+                    new Register(0x380A,0x02),
+                    new Register(0x380B,0x58),
+                    new Register(0x3814,0x03),
+                    new Register(0x3815,0x01),
+                    new Register(0x382A,0x03),
+                    new Register(0x382B,0x01),
+                    new Register(0x3821,0xF1),
                 } },
                 new VideoSetting(){ Description="800x600 SVGA", Registers=new List<Register>(){
                     new Register(0x3808,0x03),
@@ -147,7 +173,7 @@ namespace CameraVision
             };
 
             CurrentDemosaicingAlgorithm = CameraVision.DemosaicingAlgorithms.SIMPLE_INTERPOLATION;
-            CurrentVideoSetting = VideoSettings[5];
+            CurrentVideoSetting = VideoSettings[7];
 
             Ccm = new double[9];
 
@@ -156,7 +182,7 @@ namespace CameraVision
             Ccm[4] = 1.0;
             Ccm[8] = 1.0;
 
-
+            // TODO: Read CCM from external file
             Ccm[0] = 1.5344;
             Ccm[1] = 0.241;
             Ccm[2] = -0.2618;
@@ -181,6 +207,7 @@ namespace CameraVision
             Registers = new ObservableCollection<Register>();
         }
 
+        // Experimental function
         private async void ExposureBracketing()
         {
             _sensor.WriteReg(0x3500, 0);
@@ -195,6 +222,7 @@ namespace CameraVision
             }
         }
 
+        // Experimental function
         private void FocusBracketing()
         {
             Focus = 1000;
@@ -206,12 +234,16 @@ namespace CameraVision
             }
         }
 
+        /// <summary>
+        /// Load Registers from custom .ovr file format
+        /// </summary>
         public void LoadRegisters()
         {
+            // TODO: Reset first the current registers?
             var dlg = new OpenFileDialog();
             dlg.FileName = "ov8865";
-            dlg.DefaultExt = ".ovregs";
-            dlg.Filter = "OV8865 registers (.ovregs)|*.ovregs";
+            dlg.DefaultExt = ".ovr";
+            dlg.Filter = "OV8865 registers (.ovr)|*.ovr";
             var res = dlg.ShowDialog();
             if (res == true)
             {
@@ -243,6 +275,8 @@ namespace CameraVision
         public void ReadRegisters()
         {
             Registers.Clear();
+
+            // TODO: Read registers descriptions from extenal file
 
             //AddRegister(0x0100, "OV8865_SC_CTRL0100");
             //AddRegister(0x0103, "OV8865_SC_CTRL0103");
@@ -394,6 +428,8 @@ namespace CameraVision
             set
             {
                 _sensor.SetExposure((UInt16)(value));
+
+                // TODO: Check upper limit to exposure/vts/hts settings
                 UInt16 vts = _sensor.GetVTS();  // dummy lines
                 UInt16 hts = _sensor.GetHTS();  // extra lines
 
@@ -407,7 +443,7 @@ namespace CameraVision
                     _sensor.SetVTS((UInt16)(exposure + 4));
                 }
 
-                OnPropertyChanged("Exposure");
+                OnPropertyChanged();
                 OnPropertyChanged("ExposureMs");
             }
         }
@@ -415,13 +451,13 @@ namespace CameraVision
         public double Focus
         {
             get { return (double)(_sensor.GetFocus()); }
-            set { _sensor.SetFocus((UInt16)value); OnPropertyChanged("Focus"); }
+            set { _sensor.SetFocus((UInt16)value); OnPropertyChanged(); }
         }
 
         public double AnalogGain
         {
             get { return (double)(_sensor.GetAnalogGain() + 1); }
-            set { _sensor.SetAnalogGain((byte)(value - 1)); OnPropertyChanged("AnalogGain"); OnPropertyChanged("ISO"); }
+            set { _sensor.SetAnalogGain((byte)(value - 1)); OnPropertyChanged(); OnPropertyChanged("ISO"); }
         }
 
         public double ISO
@@ -432,19 +468,19 @@ namespace CameraVision
         public double MWBGainRed
         {
             get { return (double)(_sensor.GetMWBGainRed() / 1024); }
-            set { _sensor.SetMWBGainRed((UInt16)(value * 1024)); OnPropertyChanged("MWBGainRed"); }
+            set { _sensor.SetMWBGainRed((UInt16)(value * 1024)); OnPropertyChanged(); }
         }
 
         public double MWBGainGreen
         {
             get { return (double)(_sensor.GetMWBGainGreen() / 1024); }
-            set { _sensor.SetMWBGainGreen((UInt16)(value * 1024)); OnPropertyChanged("MWBGainGreen"); }
+            set { _sensor.SetMWBGainGreen((UInt16)(value * 1024)); OnPropertyChanged(); }
         }
 
         public double MWBGainBlue
         {
             get { return (double)(_sensor.GetMWBGainBlue() / 1024); }
-            set { _sensor.SetMWBGainBlue((UInt16)(value * 1024)); OnPropertyChanged("MWBGainBlue"); }
+            set { _sensor.SetMWBGainBlue((UInt16)(value * 1024)); OnPropertyChanged(); }
         }
 
         public WriteableBitmap Image
@@ -453,7 +489,7 @@ namespace CameraVision
             set
             {
                 _image = value;
-                OnPropertyChanged("Image");
+                OnPropertyChanged();
             }
         }
 
@@ -467,7 +503,7 @@ namespace CameraVision
             set
             {
                 _currentVideoSetting = value;
-                OnPropertyChanged("CurrentVideoSetting");
+                OnPropertyChanged();
 
                 //_sensor.WriteReg(0x0100, 0x00); // Software Standby                
 
@@ -482,9 +518,9 @@ namespace CameraVision
                 _sensor.WriteReg(0x382B, 0x01);
                 Thread.Sleep(200);
 
-                _sensor.WriteReg(0x3821, 0x00); // 48
-                _sensor.WriteReg(0x3830, 0x08);
-                _sensor.WriteReg(0x3836, 0x02);
+                _sensor.WriteReg(0x3821, 0x40); // FORMAT2 = hsync_en_o
+                _sensor.WriteReg(0x3830, 0x08); // BLC NUM OPTION
+                _sensor.WriteReg(0x3836, 0x02); // ZLINE NUM OPTION
 
                 //_sensor.WriteReg(0x0100, 0x01); // Streaming
 
@@ -518,7 +554,7 @@ namespace CameraVision
             set
             {
                 _currentDemosaicingAlgorithm = value;
-                OnPropertyChanged("CurrentDemosaicingAlgorithm");
+                OnPropertyChanged();
             }
         }
 
@@ -528,11 +564,10 @@ namespace CameraVision
             {
                 return _ccm;
             }
-
             set
             {
                 _ccm = value;
-                OnPropertyChanged("Ccm");
+                OnPropertyChanged();
             }
         }
 
@@ -542,11 +577,10 @@ namespace CameraVision
             {
                 return _isColorCorrectionEnabled;
             }
-
             set
             {
                 _isColorCorrectionEnabled = value;
-                OnPropertyChanged("IsColorCorrectionEnabled");
+                OnPropertyChanged();
             }
         }
 
@@ -559,7 +593,7 @@ namespace CameraVision
             set
             {
                 _sensor.SetWhiteBalanceEnable(value);
-                OnPropertyChanged("IsWhiteBalanceEnabled");
+                OnPropertyChanged();
             }
         }
 
@@ -590,11 +624,10 @@ namespace CameraVision
             {
                 return _histogramPoints;
             }
-
             set
             {
                 _histogramPoints = value;
-                OnPropertyChanged("HistogramPoints");
+                OnPropertyChanged();
             }
         }
 
@@ -604,11 +637,10 @@ namespace CameraVision
             {
                 return _ccmScale;
             }
-
             set
             {
                 _ccmScale = value;
-                OnPropertyChanged("CcmScale");
+                OnPropertyChanged();
             }
         }
 
@@ -626,6 +658,8 @@ namespace CameraVision
             int imageWidth = (int)Image.Width;
             int imageHeight = (int)Image.Height;
             byte[] rawPixels = _sensor.GetImage(imageWidth, imageHeight);
+
+            // TODO: Implement Color Correction BEFORE demosaicing to improve performance and quality
 
             // Create Histogram
             int[] histogramValues = new int[256];
@@ -663,7 +697,7 @@ namespace CameraVision
                     break;
                 default:
                     throw new Exception("Demosaicing algorithm not implemented");
-            }
+            }            
 
             if (IsColorCorrectionEnabled)
             {
@@ -708,6 +742,7 @@ namespace CameraVision
 
         public void SaveImage()
         {
+            // TODO: Add RAW format (.DNG)
             var dlg = new SaveFileDialog();
             dlg.FileName = "camera_" + DateTime.Now.ToString("hhmmss") + ".png";
             dlg.DefaultExt = ".png";

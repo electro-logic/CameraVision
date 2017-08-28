@@ -6,22 +6,18 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 /// <summary>
-/// Provides common functionality for ViewModel classes
+/// Provides common functionality for ViewModel classes. Allow to easily implement MVVM pattern.
 /// </summary>
 public abstract class ObjectModel : INotifyPropertyChanged, IDataErrorInfo
 {
 	public event PropertyChangedEventHandler PropertyChanged;
 
-    protected void OnPropertyChanged(string propertyName)
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
 	{
-		PropertyChangedEventHandler handler = PropertyChanged;
-
-		if (handler != null)
-		{
-			handler(this, new PropertyChangedEventArgs(propertyName));
-		}
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 
 	protected virtual string OnValidate(string propertyName)
