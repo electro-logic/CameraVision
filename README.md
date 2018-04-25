@@ -33,7 +33,7 @@ Quick start:
 F.A.Q.
 
 Q) When I launch CameraVision.exe image is corrupted.
-A) Try to press KEY0 on DE0-NANO to reset the system and try again to launch the software
+A) Try to press KEY0 on DE0-NANO to reset the system and try again to launch the software. Try changing resolution (avoid binning) just after programming and before acquiring images.
 
 Q) How can I calculate Color Correction Matrix?
 A) You need a Color Checker and an app like Color Corrector (https://www.microsoft.com/store/productId/9PNVVHVWZB85)

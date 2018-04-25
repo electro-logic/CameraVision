@@ -173,7 +173,7 @@ namespace CameraVision
             };
 
             CurrentDemosaicingAlgorithm = CameraVision.DemosaicingAlgorithms.SIMPLE_INTERPOLATION;
-            CurrentVideoSetting = VideoSettings[7];
+            CurrentVideoSetting = VideoSettings[8];
 
             Ccm = new double[9];
 
