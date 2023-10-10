@@ -4,8 +4,6 @@ Low-level FPGA / D8M / OV8865 interfacing with PC throught USB.
 
 **IMPORTANT: This project is now discontinued and superseed by Camera Vision 2 (https://github.com/electro-logic/CameraVision2)**
 
-**Please read http://electro-logic.blogspot.it for more documentation, articles, etc..**
-
 ![alt text](https://raw.githubusercontent.com/electro-logic/CameraVision/master/docs/de0-nano_d8m.jpg)
 
 ![alt text](https://raw.githubusercontent.com/electro-logic/CameraVision/master/docs/camera_vision_gui.png)
