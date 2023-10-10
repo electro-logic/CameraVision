@@ -2,6 +2,8 @@
 
 Low-level FPGA / D8M / OV8865 interfacing with PC throught USB.
 
+**IMPORTANT: This project is now discontinued and superseed by Camera Vision 2 (https://github.com/electro-logic/CameraVision2)**
+
 **Please read http://electro-logic.blogspot.it for more documentation, articles, etc..**
 
 ![alt text](https://raw.githubusercontent.com/electro-logic/CameraVision/master/docs/de0-nano_d8m.jpg)
@@ -34,6 +36,3 @@ F.A.Q.
 
 Q) When I launch CameraVision.exe image is corrupted.
 A) Try to press KEY0 on DE0-NANO to reset the system and try again to launch the software. Try changing resolution (avoid binning) just after programming and before acquiring images.
-
-Q) How can I calculate Color Correction Matrix?
-A) You need a Color Checker and an app like Color Corrector (https://www.microsoft.com/store/productId/9PNVVHVWZB85)
